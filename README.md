@@ -38,7 +38,7 @@ Leg8t Empanada is a web-based ordering system developed as a Final Project for *
 
 ## Developers
 
-YOUR GROUP NAME
+Leg8t Empanada
 
 ## Disclaimer
 
