@@ -3,136 +3,131 @@ session_start();
 include("includes/db.php");
 include("includes/log_activity.php");
 include("config/mail.php");
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 require "PHPMailer/src/Exception.php";
 require "PHPMailer/src/PHPMailer.php";
 require "PHPMailer/src/SMTP.php";
+
 /* ==========================================
    REGISTER
 ========================================== */
 if (isset($_POST['register'])) {
     $fullname = trim($_POST['fullname']);
-    $email = trim($_POST['email']);
+    $email    = trim($_POST['email']);
     $password = $_POST['password'];
-    $confirm = $_POST['confirm'];
-    $address = trim($_POST['address']);
-    $contact = trim($_POST['contact']);
+    $confirm  = $_POST['confirm'];
+    $address  = trim($_POST['address']);
+    $contact  = trim($_POST['contact']);
+
     /* ==========================
        PASSWORD CHECK
     ========================== */
     if ($password != $confirm) {
         $error = "Password and Confirm Password do not match.";
     } else {
+
         /* ==========================
            CHECK EXISTING EMAIL
         ========================== */
-        $check = mysqli_query(
-            $conn,
-            "SELECT *
-             FROM users
-             WHERE email='$email'"
-        );
+        $check = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
+
         if (mysqli_num_rows($check) > 0) {
             $error = "Email already exists.";
         } else {
+
             /* ==========================
                HASH PASSWORD
             ========================== */
-            $hashedPassword = password_hash(
-                $password,
-                PASSWORD_DEFAULT
-            );
-            mysqli_query(
-                $conn,
-                "INSERT INTO users
-                (
-                    fullname,
-                    email,
-                    password,
-                    address,
-                    contact,
-                    role,
-                    status
-                )
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            mysqli_query($conn, "INSERT INTO users
+                (fullname, email, password, address, contact, role, status)
                 VALUES
-                (
-                    '$fullname',
-                    '$email',
-                    '$hashedPassword',
-                    '$address',
-                    '$contact',
-                    'buyer',
-                    'pending'
-                )"
+                ('$fullname', '$email', '$hashedPassword', '$address', '$contact', 'buyer', 'active')"
             );
+
             $user_id = mysqli_insert_id($conn);
+
             /* ==========================
                SEND EMAIL
             ========================== */
             $mail = new PHPMailer(true);
             try {
                 $mail->isSMTP();
-                $mail->Host = "smtp.gmail.com";
-                $mail->SMTPAuth = true;
-                $mail->Username = $mailUsername;
-                $mail->Password = $mailPassword;
+                $mail->Host       = "smtp.gmail.com";
+                $mail->SMTPAuth   = true;
+                $mail->Username   = $mailUsername;
+                $mail->Password   = $mailPassword;
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                $mail->Port = 587;
-                $mail->setFrom(
-                    $mailUsername,
-                    "Leg8t Empanada"
-                );
-                $mail->addAddress(
-                    $email,
-                    $fullname
-                );
+                $mail->Port       = 587;
+
+                $mail->setFrom($mailUsername, "Leg8t Empanada");
+                $mail->addAddress($email, $fullname);
+
                 $mail->isHTML(true);
                 $mail->Subject = "Welcome to Leg8t Empanada";
                 $mail->Body = "
-                <div style='font-family:Arial,sans-serif;padding:20px;'>
-                    <h2 style='color:#5C2D0A;'>
-                        Welcome to Leg8t Empanada!
-                    </h2>
-                    <p>
-                        Hello <strong>$fullname</strong>,
-                    </p>
-                    <p>
-                        Thank you for registering with
-                        <strong>Leg8t Empanada</strong>.
-                    </p>
-                    <p>
-                        Your account has been successfully created.
-                    </p>
-                    <hr>
-                    <p>
-                        <strong>Email Address:</strong>
-                        $email
-                    </p>
-                    <p>
-                        Your account is currently
-                        <strong>Pending</strong>
-                        until approved by the administrator.
-                    </p>
-                    <br>
-                    <p>
-                        Thank you for choosing
-                        <strong>Leg8t Empanada</strong>.
-                    </p>
-                </div>
+                    <div style='font-family:Arial,sans-serif; max-width:650px; margin:auto; background:#fffaf3; border:1px solid #e8d7c3; border-radius:12px; overflow:hidden;'>
+
+                        <div style='background:#5C2D0A; padding:25px; text-align:center;'>
+                            <h1 style='color:white; margin:0;'>Leg8t Empanada</h1>
+                            <p style='color:#F4D9A5; margin-top:10px;'>Freshly Baked &bull; Authentic Flavors</p>
+                        </div>
+
+                        <div style='padding:35px;'>
+                            <h2 style='color:#5C2D0A;'>Hello $fullname,</h2>
+
+                            <p>Thank you for registering with <strong>Leg8t Empanada</strong>.</p>
+
+                            <p>Your account has been successfully created and is now
+                                <strong style='color:green;'>ACTIVE</strong>.
+                            </p>
+
+                            <p>You may now login and start ordering our freshly baked empanadas.</p>
+
+                            <table style='width:100%; border-collapse:collapse; margin-top:25px;'>
+                                <tr>
+                                    <td style='padding:12px; background:#F5ECE2; font-weight:bold;'>Registered Email</td>
+                                    <td style='padding:12px;'>$email</td>
+                                </tr>
+                                <tr>
+                                    <td style='padding:12px; background:#F5ECE2; font-weight:bold;'>Account Status</td>
+                                    <td style='padding:12px; color:green;'>Active</td>
+                                </tr>
+                            </table>
+
+                            <br>
+
+                            <div style='text-align:center; margin-top:30px;'>
+                                <a href='http://localhost/empanada_shop/login.php'
+                                   style='background:#C8860A; color:white; padding:14px 28px; text-decoration:none; border-radius:8px; font-weight:bold; display:inline-block;'>
+                                    Login to Your Account
+                                </a>
+                            </div>
+
+                            <hr style='margin-top:40px;'>
+
+                            <p style='font-size:12px; color:#777; text-align:center;'>
+                                This email was automatically generated by Leg8t Empanada.<br>
+                                Please do not reply to this message.
+                            </p>
+                        </div>
+                    </div>
                 ";
+
                 $mail->send();
             } catch (Exception $e) {
                 $error = "Registration completed, but the confirmation email could not be sent.";
             }
+
             /* ==========================
                AUDIT LOG
             ========================== */
-            logActivity(
-                $conn,
-                $user_id,
-                "Registered New Account"
-            );
+            logActivity($conn, $user_id, "Registered New Account");
+
             if (!isset($error)) {
                 $success = "Registration successful! A confirmation email has been sent to your email address.";
             }
@@ -145,111 +140,82 @@ if (isset($_POST['register'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        Register
-    </title>
+    <title>Register</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
         <div class="logo">
-    <img
-        src="images/logo.png"
-        alt="Leg8t Empanada"
-        class="logo-image"
-    >
-    <div class="logo-text">
-        <h2>
-            Leg8t Empanada
-        </h2>
-        <small>
-            Freshly Baked • Authentic Flavors
-        </small>
-    </div>
-</div>
+            <img src="images/logo.png" alt="Leg8t Empanada" class="logo-image">
+            <div class="logo-text">
+                <h2>Leg8t Empanada</h2>
+                <small>Freshly Baked &bull; Authentic Flavors</small>
+            </div>
+        </div>
     </nav>
+
     <div class="form-card">
-        <h2>
-            Create Account
-        </h2>
-        <p>
-            Register to start ordering delicious empanadas.
-        </p>
-        <?php
-if (isset($error)) {
-?>
+        <h2>Create Account</h2>
+        <p>Register to start ordering delicious empanadas.</p>
+
+        <?php if (isset($error)): ?>
         <div class="error">
             <?php echo $error; ?>
         </div>
-        <?php
-}
-if (isset($success)) {
-?>
+        <?php endif; ?>
+
+        <?php if (isset($success)): ?>
         <div class="success">
             <?php echo $success; ?>
         </div>
-        <?php
-}
-?>
+        <?php endif; ?>
+
         <form method="POST">
             <div class="form-group">
-                <label>
-                    Complete Name
-                </label>
+                <label>Complete Name</label>
                 <input type="text" name="fullname" required>
             </div>
+
             <div class="form-group">
-                <label>
-                    Email Address
-                </label>
+                <label>Email Address</label>
                 <input type="email" name="email" required autocomplete="email">
             </div>
+
             <div class="form-group">
-                <label>
-                    Password
-                </label>
+                <label>Password</label>
                 <input type="password" name="password" required autocomplete="new-password">
             </div>
+
             <div class="form-group">
-                <label>
-                    Confirm Password
-                </label>
+                <label>Confirm Password</label>
                 <input type="password" name="confirm" required autocomplete="new-password">
             </div>
+
             <div class="form-group">
-                <label>
-                    Complete Address
-                </label>
+                <label>Complete Address</label>
                 <textarea name="address" required></textarea>
             </div>
+
             <div class="form-group">
-                <label>
-                    Contact Number
-                </label>
+                <label>Contact Number</label>
                 <input type="text" name="contact" required>
             </div>
+
             <button type="submit" name="register" class="btn btn-primary" style="width:100%;">
                 Create Account
             </button>
         </form>
+
         <br>
         <center>
-            Already have an account?
-            <a href="login.php">
-                Login
-            </a>
+            Already have an account? <a href="login.php">Login</a>
         </center>
     </div>
+
     <footer>
-        🫓
-        <strong>
-            Leg8t Empanada
-        </strong>
+        🫓 <strong>Leg8t Empanada</strong>
         <br><br>
-        Group Name:
-        <strong>
-           Leg8t Empanada
-        </strong>
+        Group Name: <strong>Leg8t Empanada</strong>
         <br><br>
         ⚠️ This website is for educational purposes only and is submitted as our Final Project.
     </footer>
