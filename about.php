@@ -1,127 +1,204 @@
 <?php
-/* ==========================================
-   ABOUT PAGE
-========================================== */
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Golden Crust Empanada Shop</title>
+    <title>About | Leg8t Empanada</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- ==========================================
+
+<!-- ==========================================
      NAVIGATION
 ========================================== -->
-    <nav>
-        <div class="logo">
-    <img
-        src="images/logo.png"
-        alt="Leg8t Empanada"
-        class="logo-image"
-    >
-    <div class="logo-text">
-        <h2>
-            Leg8t Empanada
-        </h2>
-        <small>
-            Freshly Baked • Authentic Flavors
-        </small>
+<nav>
+    <div class="logo">
+        <img src="images/logo.png" alt="Leg8t Empanada" class="logo-image">
     </div>
-</div>
-        <ul>
-            <li>
-                <a href="index.php">Home</a>
-            </li>
-            <li>
-                <a href="store.php">Store</a>
-            </li>
-            <li>
-                <a href="about.php" class="active">
-                    About
-                </a>
-            </li>
-            <li>
-                <a href="cart.php">Cart</a>
-            </li>
-        </ul>
-    </nav>
-    <!-- ==========================================
+
+    <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="store.php">Store</a></li>
+        <li><a href="about.php" class="active">About</a></li>
+
+        <?php if (isset($_SESSION['user_id'])): ?>
+        <li><a href="cart.php">Cart</a></li>
+        <li><a href="logout.php">Logout</a></li>
+        <?php else: ?>
+        <li><a href="login.php">Login</a></li>
+        <li><a href="register.php">Register</a></li>
+        <?php endif; ?>
+    </ul>
+</nav>
+
+<!-- ==========================================
      HERO
 ========================================== -->
-    <section class="hero">
-        <h1>
-            About
-            <span>
-                Golden Crust
-            </span>
-        </h1>
-        <p>
-            Serving freshly baked empanadas made with
-            passion, quality ingredients, and a touch of
-            homemade goodness.
-        </p>
-    </section>
-    <!-- ==========================================
-     ABOUT CONTENT
+<section class="hero">
+    <img src="images/logo.png" class="about-logo" alt="Leg8t Logo">
+    <h1>About <span>Leg8t Empanada</span></h1>
+    <p>Freshly Baked &bull; Authentic Flavors</p>
+</section>
+
+<!-- ==========================================
+     ABOUT
 ========================================== -->
-    <div class="container">
-        <div class="card" style="padding:40px;">
-            <h2 style="color:var(--brown); margin-bottom:20px;">
-                🫓 Golden Crust Empanada Shop
-            </h2>
-            <p style="color:var(--text2); line-height:1.9; margin-bottom:25px;">
-                This website is an educational project
-                developed for learning PHP, MySQL,
-                HTML, CSS, and basic e-commerce concepts.
-                It demonstrates how an online empanada shop
-                can manage products, shopping carts,
-                checkout, payment, and user accounts.
+<div class="container about-container">
+
+    <div class="about-card">
+        <h2>Our Story</h2>
+        <p>
+            Leg8t Empanada is a modern web-based ordering system inspired by the
+            rich Filipino tradition of serving freshly baked empanadas made from
+            quality ingredients. The project was created to provide customers
+            with a simple, fast, and convenient online ordering experience while
+            allowing the business to efficiently manage products, inventory,
+            customers, and orders.
+        </p>
+        <p>
+            This system was developed as part of the CCS0043 Final Project by
+            students of <strong>FEU Institute of Technology</strong> to
+            demonstrate practical web development, database management, and
+            software engineering skills.
+        </p>
+    </div>
+
+    <br><br>
+
+    <div class="about-grid">
+        <div class="mission-card">
+            <h2>🎯 Mission</h2>
+            <p>
+                To provide freshly baked, high-quality empanadas using premium
+                ingredients while delivering excellent customer service,
+                convenience, and customer satisfaction.
             </p>
-            <div class="grid">
-                <div class="card" style="padding:25px;">
-                    <h3 style="color:var(--brown); margin-bottom:15px;">
-                        🎯 Our Mission
-                    </h3>
-                    <p style="color:var(--text2); line-height:1.8;">
-                        To provide a simple and user-friendly
-                        online ordering experience while
-                        showcasing modern web development
-                        techniques.
-                    </p>
-                </div>
-                <div class="card" style="padding:25px;">
-                    <h3 style="color:var(--brown); margin-bottom:15px;">
-                        🌟 Our Vision
-                    </h3>
-                    <p style="color:var(--text2); line-height:1.8;">
-                        To become a professional sample
-                        e-commerce website that demonstrates
-                        clean coding practices and modern UI
-                        design.
+        </div>
+
+        <div class="mission-card">
+            <h2>👁 Vision</h2>
+            <p>
+                To become one of the most trusted empanada brands by combining
+                traditional Filipino recipes with modern technology, innovation,
+                and outstanding service.
+            </p>
+        </div>
+    </div>
+
+    <br><br>
+
+    <div class="about-card">
+        <h2 style="text-align:center;">Meet the Developers</h2>
+        <p style="text-align:center; margin-bottom:45px;">
+            This website was designed and developed by students of
+            <strong>FEU Institute of Technology</strong> for the
+            <strong>CCS0043 Final Project.</strong>
+        </p>
+
+        <div class="team-grid">
+
+            <!-- ==========================================
+                 DEVELOPER 1
+            ========================================== -->
+            <div class="team-card">
+                <img src="images/pfp1.jpg" class="team-photo" alt="Developer 1">
+                <div class="team-content">
+                    <h3>Member Name 1</h3>
+                    <span class="role">Project Leader</span>
+                    <p>
+                        Responsible for the overall planning, backend development,
+                        database integration, and system implementation.
                     </p>
                 </div>
             </div>
-            <br><br>
-            <div style="text-align:center;">
-                <a href="store.php" class="btn btn-primary">
-                    🛒 Browse Our Products
-                </a>
+
+            <!-- ==========================================
+                 DEVELOPER 2
+            ========================================== -->
+            <div class="team-card">
+                <img src="images/pfp2.jpg" class="team-photo" alt="Developer 2">
+                <div class="team-content">
+                    <h3>Member Name 2</h3>
+                    <span class="role">Frontend Developer</span>
+                    <p>
+                        Responsible for the website layout, user interface,
+                        responsive design, and user experience.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 DEVELOPER 3
+            ========================================== -->
+            <div class="team-card">
+                <img src="images/pfp3.jpg" class="team-photo" alt="Developer 3">
+                <div class="team-content">
+                    <h3>Member Name 3</h3>
+                    <span class="role">Database Administrator</span>
+                    <p>
+                        Responsible for database design, SQL implementation,
+                        documentation, testing, and quality assurance.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <br><br>
+
+</div>
+
+<!-- ==========================================
+     CONTACT
+========================================== -->
+<div class="container about-container">
+    <div class="about-card">
+        <h2 style="text-align:center;">Get in Touch</h2>
+        <p style="text-align:center; margin-bottom:40px;">
+            Have questions, suggestions, or would like to know more about
+            Leg8t Empanada? Feel free to contact us.
+        </p>
+
+        <div class="contact-grid">
+            <div>
+                <h3>📧 Email</h3>
+                <p>leg8tempanada@gmail.com</p>
+            </div>
+
+            <div>
+                <h3>📍 Address</h3>
+                <p>
+                    FEU Institute of Technology<br>
+                    Sampaloc, Manila<br>
+                    Philippines
+                </p>
+            </div>
+
+            <div>
+                <h3>📱 Contact Number</h3>
+                <p>+63 912 345 6789</p>
             </div>
         </div>
     </div>
-    <!-- ==========================================
+</div>
+
+<!-- ==========================================
      FOOTER
 ========================================== -->
-    <footer>
-        <strong>
-            🫓 Leg8t Empanada
-        </strong>
-        <br><br>
-        Educational Project • Web Development
-    </footer>
+<footer>
+    <br>
+    <strong>Leg8t Empanada</strong>
+    <br><br>
+    CCS0043 Final Project
+    <br>
+    Group Name: <strong>YOUR GROUP NAME</strong>
+    <br><br>
+    ⚠️ This website is for educational purposes only.
+</footer>
+
 </body>
 </html>
-```
